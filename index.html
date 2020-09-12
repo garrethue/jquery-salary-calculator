@@ -14,11 +14,17 @@
   </head>
 
   <body id="body-id">
-    <h1 class="display-4 text-center">Salary Calculator</h1>
-    <hr class="my-4" />
+    <h1 class="display-4 text-center font-weight-normal">Salary Calculator</h1>
+    <hr class="mt-2 mb-3" />
 
     <!-- create form using bootstrap classes -->
-    <form class="form mt-1 ml-2 mr-2">
+    <div class="form-row">
+        <div class="col">
+    <h3 class="display-5 float-left">Add Employee</h1>
+        </div>
+    </div>
+
+    <form class="form mt-1" id="employee-form">
       <div class="form-row">
         <div class="col">
           <input
@@ -33,7 +39,7 @@
             type="text"
             class="form-control"
             placeholder="First Name"
-            id="first-name"
+            id="employee-first-name"
           />
         </div>
         <div class="col">
@@ -41,7 +47,7 @@
             type="text"
             class="form-control"
             placeholder="Last Name"
-            id="last-name"
+            id="employee-last-name"
           />
         </div>
         <div class="col">
@@ -57,7 +63,7 @@
             type="text"
             class="form-control"
             placeholder="Annual Salary"
-            id="salary"
+            id="employee-salary"
           />
         </div>
       </div>
@@ -73,6 +79,7 @@
         </div>
       </div>
     </form>
+
     <!-- create table using bootstrap classes -->
     <table class="table table-hover mt-2" id="employee-table">
       <thead>
@@ -82,14 +89,10 @@
           <th>Last Name</th>
           <th>Title</th>
           <th>Annual Salary</th>
+        <th></th>
         </tr>
       </thead>
-      <tbody>
-        <!-- <tr>
-          <td>John</td>
-          <td>Doe</td>
-          <td>john@example.com</td>
-        </tr> -->
+      <tbody id="employee-table-body">
       </tbody>
     </table>
 
