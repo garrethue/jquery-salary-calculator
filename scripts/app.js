@@ -10,7 +10,7 @@ $(document).ready(() => {
       $("#employee-first-name").val() === "" ||
       $("#employee-last-name").val() === "" ||
       $("#employee-title").val() === "" ||
-      $("##employee-salary").val() === ""
+      $("#employee-salary").val() === ""
     ) {
       alert("Error: please provide input for all fields!");
     } else {
