@@ -1,6 +1,6 @@
-//TODO: finish delete method
+//TODO: If the total monthly cost exceeds $20,000, add a red background color to the total monthly cost.
 //TODO: package onsubmit callback
-//TODO: What if I submit a person, then resubmit that person?
+//TODO: What if I submit a person, then resubmit that person? USE the COMPANY'S STR ID TO HANDLE THIS LOGIC
 //TODO: Handle wrong data type inputs
 //TODO: add commas to numbers on UI
 
