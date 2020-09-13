@@ -4,6 +4,7 @@
 const objEmployees = {}; //this object should be constant so we don't lose valuable data
 let globalTotalCosts = 0;
 let globalEmployeePrimaryKeyID = 0; //this allows for each employee added to be uniquely identified
+const regexTestForOnlyDigits = /[^0-9]/;
 
 //need to create ids for delete button
 $(document).ready(() => {
@@ -11,6 +12,7 @@ $(document).ready(() => {
   $("#employee-form").on("submit", (e) => {
     //prevent page from refreshing
     e.preventDefault();
+
     //if nothing is passed, alert the user
     if (
       //if any inputs are blank
@@ -21,6 +23,9 @@ $(document).ready(() => {
       $("#employee-salary").val() === ""
     ) {
       alert("Error: please provide input for all fields!");
+    } else if (regexTestForOnlyDigits.test($("#employee-salary").val())) {
+      //if user inputs a string without only digits
+      alert("Salaries can only have digits!");
     } else {
       addEmployee(
         Number($("#employee-ID").val()),
@@ -50,9 +55,9 @@ $(document).ready(() => {
         //add class
         $("#total-monthly-cost").addClass("alert alert-danger");
       }
+      //clear inputs when form submitted
+      $('input[type="text"]').val("");
     }
-    //clear inputs when form submitted
-    $('input[type="text"]').val("");
   }); //end of on-submit event
 
   //filter click events to only of the class, .delete-button
