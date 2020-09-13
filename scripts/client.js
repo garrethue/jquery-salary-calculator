@@ -1,16 +1,18 @@
 //TODO: finish delete method
 //TODO: package onsubmit callback
+//TODO: What if I submit a person, then resubmit that person?
+//TODO: Handle wrong data type inputs
+//TODO: add commas to numbers on UI
 
-let primaryKeyId = 0; //this allows for each employee added to be uniquely identified
+let globalEmployeePrimaryKeyID = 0; //this allows for each employee added to be uniquely identified
 const objEmployees = {}; //this object should be constant so we don't lose valuable data
-let totalCosts = 0;
+let globalTotalCosts = 0;
 
 //need to create ids for delete button
 $(document).ready(() => {
   //onSubmit function
   $("#employee-form").on("submit", (e) => {
     e.preventDefault();
-    console.log(typeof $("#employee-salary").val());
     //if nothing is passed, alert the user
     if (
       //if any inputs are blank
@@ -29,26 +31,22 @@ $(document).ready(() => {
         $("#employee-last-name").val(),
         $("#employee-title").val(),
         Number($("#employee-salary").val()),
-        primaryKeyId
+        objEmployees
       );
 
       //append employee data to table
-      //first return the primaryKeyId and THEN increment
+      //first return the globalEmployeePrimaryKeyID and THEN increment
       $("#employee-table-body").append(`<tr>
         <td>${$("#employee-ID").val()}</td>
         <td>${$("#employee-first-name").val()}</td>
         <td>${$("#employee-last-name").val()}</td>
         <td>${$("#employee-title").val()}</td>
         <td>${$("#employee-salary").val()}</td>
-        <td>${`<button class='btn btn-danger delete-button' id=${primaryKeyId++}>Delete</button>`}</td> 
+        <td>${`<button class='btn btn-danger delete-button' id=${globalEmployeePrimaryKeyID++}>Delete</button>`}</td> 
     </tr>`);
 
       //update total monthly costs
-      $("#total-monthly-cost").text(
-        `Total Monthly: $${getMonthlyCosts(
-          Number($("#employee-salary").val())
-        )}`
-      );
+      $("#total-monthly-cost").text(`Total Monthly: $${getMonthlyCosts()}`);
     }
     //clear inputs when form submitted
     $('input[type="text"]').val("");
@@ -56,37 +54,44 @@ $(document).ready(() => {
 
   //filter click events to only of the class, .delete-button
   $("body").on("click", ".delete-button", (e) => {
-    //make sure to decrement primaryKeyId
-    console.log(e.target);
-    console.log($(e.target).closest("tr"));
+    inactivateEmployee(Number(e.target.id), objEmployees);
     $(e.target).closest("tr").remove();
+    //update Total Monthly on the DOM:
+    $("#total-monthly-cost").text(`Total Monthly: $${getMonthlyCosts()}`);
   });
 });
 
 //function to add an employee to object of employees
-//this implementation was utilized because order is unneccessary that an array confers
+//this implementation was utilized because order is unneccessary
 //fast access/insertion/removal is needed
 const addEmployee = (
-  strEmployeeID,
-  strFirstName,
-  strLastName,
-  strTitle,
-  salary,
-  primaryKeyId
+  pnumEmployeeID,
+  pstrFirstName,
+  pstrLastName,
+  pstrTitle,
+  pnumSalary,
+  pobjEmployees
 ) => {
   //insert employee into object of employees with unique ID
-  objEmployees[primaryKeyId] = {
-    strEmployeeID,
-    strFirstName,
-    strLastName,
-    strTitle,
-    salary,
-    active: true,
+  pobjEmployees[globalEmployeePrimaryKeyID] = {
+    numEmployeeID: pnumEmployeeID,
+    strFirstName: pstrFirstName,
+    strLastName: pstrLastName,
+    strTitle: pstrTitle,
+    numSalary: pnumSalary,
+    blnActive: true,
   };
+  globalTotalCosts += pnumSalary;
 };
 
-//convert input salary to number, update global variable, and convert number to a monthly cost
-const getMonthlyCosts = (employeeSalary) => {
-  totalCosts += employeeSalary;
-  return Math.round((totalCosts / 12) * 100) / 100;
+//employees should remain in our database for future purposes
+//render them inactive instead
+const inactivateEmployee = (pnumEmployeePrimaryKey, pobjEmployees) => {
+  pobjEmployees[pnumEmployeePrimaryKey].blnActive = false;
+  globalTotalCosts -= pobjEmployees[pnumEmployeePrimaryKey].numSalary;
+};
+
+//use global globalTotalCosts to get the montly costs
+const getMonthlyCosts = () => {
+  return Math.round((globalTotalCosts / 12) * 100) / 100;
 };
