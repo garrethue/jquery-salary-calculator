@@ -11,4 +11,4 @@ This application was solved by extensively using the jQuery library to dynamical
 
 ## Screenshot
 
-(https://imgur.com/XsRqmD4)
+![Example: ](https://imgur.com/XsRqmD4)
