@@ -1,12 +1,10 @@
-//TODO: Handle wrong data type inputs!!!!
-//TODO: What if I submit a person, then resubmit that person? USE the COMPANY'S STR ID TO HANDLE THIS LOGIC
-
 //##################################################################################################################
 //Global declarations
 //##################################################################################################################
 
 const objEmployees = {}; //this object should be constant so we don't lose valuable data
 const regexTestForOnlyDigits = /[^0-9]/;
+const globalarrEmployeeIDs = [];
 let globalTotalCosts = 0;
 let globalEmployeePrimaryKeyID = 0; //this allows for each employee added to be uniquely identified
 
@@ -20,9 +18,8 @@ $(document).ready(() => {
     //prevent page from refreshing
     e.preventDefault();
 
-    //if nothing is passed, alert the user
     if (
-      //if any inputs are blank
+      //if any inputs are blank, alert user
       $("#employee-ID").val() === "" ||
       $("#employee-first-name").val() === "" ||
       $("#employee-last-name").val() === "" ||
@@ -30,21 +27,31 @@ $(document).ready(() => {
       $("#employee-salary").val() === ""
     ) {
       alert("Error: please provide input for all fields!");
-    } else if (regexTestForOnlyDigits.test($("#employee-salary").val())) {
-      //if user inputs a string without only digits
-      alert("Salaries can only have digits!");
+    } else if (
+      //for validation and functionality purposes, these fields must contain only numbers
+      regexTestForOnlyDigits.test($("#employee-salary").val()) ||
+      regexTestForOnlyDigits.test($("#employee-ID").val())
+    ) {
+      alert("Salaries and Employee IDs can only contain digits!");
+    } else if (
+      //don't allow company IDs that match to be added
+      doesEmployeeIDExist(Number($("#employee-ID").val()), globalarrEmployeeIDs)
+    ) {
+      alert("Error: The employee ID you inputted already exists!");
     } else {
+      //tests all passed, add data
       addEmployeeToDatabase(
         Number($("#employee-ID").val()),
         $("#employee-first-name").val(),
         $("#employee-last-name").val(),
         $("#employee-title").val(),
         Number($("#employee-salary").val()),
+        globalarrEmployeeIDs,
         objEmployees
       );
 
-      //append employee data to table
-      //first return the globalEmployeePrimaryKeyID and THEN increment
+      //append employee to table
+      //note the post-fix increment: first return the globalEmployeePrimaryKeyID and THEN increment
       $("#employee-table-body").append(`<tr>
         <td>${$("#employee-ID").val()}</td>
         <td>${$("#employee-first-name").val()}</td>
@@ -82,7 +89,7 @@ $(document).ready(() => {
 }); //end of document.ready()
 
 //##################################################################################################################
-//Helper functions
+//Functions
 //##################################################################################################################
 
 const addEmployeeToDatabase = (
@@ -91,6 +98,7 @@ const addEmployeeToDatabase = (
   pstrLastName,
   pstrTitle,
   pnumSalary,
+  parrEmployeeIDs,
   pobjEmployees
 ) => {
   //function to add an employee to object of employees with a unique ID
@@ -105,6 +113,8 @@ const addEmployeeToDatabase = (
     numSalary: pnumSalary,
     blnActive: true,
   };
+  //add employee ID to an array for future validation purposes
+  parrEmployeeIDs.push(pnumEmployeeID);
   globalTotalCosts += pnumSalary;
 
   return true;
@@ -129,4 +139,6 @@ const isOverBudget = () => {
   return globalTotalCosts > 240000;
 };
 
-//const doesEmployeeIDAlreadyExist = (pEmployeeId)
+const doesEmployeeIDExist = (pnumEmployeeID, parrEmployeeIDs) => {
+  return parrEmployeeIDs.some((id) => id === pnumEmployeeID);
+};
