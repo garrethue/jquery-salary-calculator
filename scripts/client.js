@@ -32,12 +32,12 @@ $(document).ready(() => {
       regexTestForOnlyDigits.test($("#employee-salary").val()) ||
       regexTestForOnlyDigits.test($("#employee-ID").val())
     ) {
-      alert("Salaries and Employee IDs can only contain digits!");
+      alert("Error: salaries and employee IDs can only contain digits!");
     } else if (
       //don't allow company IDs that match to be added
       doesEmployeeIDExist(Number($("#employee-ID").val()), globalarrEmployeeIDs)
     ) {
-      alert("Error: The employee ID you inputted already exists!");
+      alert("Error: the employee ID you inputted already exists!");
     } else {
       //tests all passed, add data
       addEmployeeToDatabase(
