@@ -1,9 +1,14 @@
 # Project Name
 
-[Project Instructions](./INSTRUCTIONS.md), this line may be removed once you have updated the README.md
+Salary Calculator for Company 'X'
 
 ## Description
 
-Your project description goes here. What problem did you solve? How did you solve it?
+Duration: A weekend to develop
 
-Additional README details can be found [here](https://github.com/PrimeAcademy/readme-template/blob/master/README.md).
+This is a simple application to add and display a roster of company employees as well as calculate the company's monthly cost for each employee.
+This application was solved by extensively using the jQuery library to dynamically render the DOM. CSS Bootstrap was implemented for a professional look.
+
+## Screenshot
+
+(https://imgur.com/XsRqmD4)
