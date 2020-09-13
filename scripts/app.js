@@ -1,8 +1,10 @@
+//TODO: finish delete method
+//TODO: package onsubmit callback
+
 let primaryKeyId = 0; //this allows for each employee added to be uniquely identified
 const objEmployees = {}; //this object should be constant so we don't lose valuable data
 let totalCosts = 0;
 
-//TODO: package onsubmit callback
 //need to create ids for delete button
 $(document).ready(() => {
   //onSubmit function
@@ -22,11 +24,11 @@ $(document).ready(() => {
     } else {
       //add employee to object of employees
       addEmployee(
-        $("#employee-ID").val(),
+        Number($("#employee-ID").val()),
         $("#employee-first-name").val(),
         $("#employee-last-name").val(),
         $("#employee-title").val(),
-        $("#employee-salary").val(),
+        Number($("#employee-salary").val()),
         primaryKeyId
       );
 
@@ -43,18 +45,21 @@ $(document).ready(() => {
 
       //update total monthly costs
       $("#total-monthly-cost").text(
-        `Total Monthly: $${getMonthlyCosts($("#employee-salary").val())}`
+        `Total Monthly: $${getMonthlyCosts(
+          Number($("#employee-salary").val())
+        )}`
       );
     }
     //clear inputs when form submitted
     $('input[type="text"]').val("");
   });
 
-  //TODO: finish delete method
   //filter click events to only of the class, .delete-button
   $("body").on("click", ".delete-button", (e) => {
     //make sure to decrement primaryKeyId
     console.log(e.target);
+    console.log($(e.target).closest("tr"));
+    $(e.target).closest("tr").remove();
   });
 });
 
@@ -62,25 +67,26 @@ $(document).ready(() => {
 //this implementation was utilized because order is unneccessary that an array confers
 //fast access/insertion/removal is needed
 const addEmployee = (
-  employeeID,
-  firstName,
-  lastName,
-  title,
+  strEmployeeID,
+  strFirstName,
+  strLastName,
+  strTitle,
   salary,
   primaryKeyId
 ) => {
   //insert employee into object of employees with unique ID
   objEmployees[primaryKeyId] = {
-    employeeID,
-    firstName,
-    lastName,
-    title,
+    strEmployeeID,
+    strFirstName,
+    strLastName,
+    strTitle,
     salary,
+    active: true,
   };
 };
 
 //convert input salary to number, update global variable, and convert number to a monthly cost
 const getMonthlyCosts = (employeeSalary) => {
-  totalCosts += Number(employeeSalary);
+  totalCosts += employeeSalary;
   return Math.round((totalCosts / 12) * 100) / 100;
 };
