@@ -1,12 +1,19 @@
 //TODO: Handle wrong data type inputs!!!!
 //TODO: What if I submit a person, then resubmit that person? USE the COMPANY'S STR ID TO HANDLE THIS LOGIC
 
+//##################################################################################################################
+//Global declarations
+//##################################################################################################################
+
 const objEmployees = {}; //this object should be constant so we don't lose valuable data
+const regexTestForOnlyDigits = /[^0-9]/;
 let globalTotalCosts = 0;
 let globalEmployeePrimaryKeyID = 0; //this allows for each employee added to be uniquely identified
-const regexTestForOnlyDigits = /[^0-9]/;
 
-//need to create ids for delete button
+//##################################################################################################################
+//Events: submit and delete
+//##################################################################################################################
+
 $(document).ready(() => {
   //onSubmit function
   $("#employee-form").on("submit", (e) => {
@@ -27,7 +34,7 @@ $(document).ready(() => {
       //if user inputs a string without only digits
       alert("Salaries can only have digits!");
     } else {
-      addEmployee(
+      addEmployeeToDatabase(
         Number($("#employee-ID").val()),
         $("#employee-first-name").val(),
         $("#employee-last-name").val(),
@@ -52,7 +59,6 @@ $(document).ready(() => {
         `Total Monthly: $${getMonthlyCosts().toLocaleString()}`
       );
       if (isOverBudget()) {
-        //add class
         $("#total-monthly-cost").addClass("alert alert-danger");
       }
       //clear inputs when form submitted
@@ -60,8 +66,8 @@ $(document).ready(() => {
     }
   }); //end of on-submit event
 
-  //filter click events to only of the class, .delete-button
   $("body").on("click", ".delete-button", (e) => {
+    //filter click events to only of the class, .delete-button
     inactivateEmployee(Number(e.target.id), objEmployees);
     $(e.target).closest("tr").remove();
 
@@ -75,10 +81,11 @@ $(document).ready(() => {
   }); //end of delete button on-click event
 }); //end of document.ready()
 
-//function to add an employee to object of employees with a unique ID
-//this implementation was utilized because order is unneccessary
-//fast access/insertion/removal is needed
-const addEmployee = (
+//##################################################################################################################
+//Helper functions
+//##################################################################################################################
+
+const addEmployeeToDatabase = (
   pnumEmployeeID,
   pstrFirstName,
   pstrLastName,
@@ -86,6 +93,10 @@ const addEmployee = (
   pnumSalary,
   pobjEmployees
 ) => {
+  //function to add an employee to object of employees with a unique ID
+  //this implementation was utilized because order is unneccessary
+  //fast access/insertion/removal is needed
+
   pobjEmployees[globalEmployeePrimaryKeyID] = {
     numEmployeeID: pnumEmployeeID,
     strFirstName: pstrFirstName,
@@ -95,21 +106,27 @@ const addEmployee = (
     blnActive: true,
   };
   globalTotalCosts += pnumSalary;
+
+  return true;
 };
 
-//employees should remain in our database for future purposes
-//render them inactive instead
 const inactivateEmployee = (pnumEmployeePrimaryKey, pobjEmployees) => {
+  //employees should remain in our database for future purposes
+  //render them inactive instead
   pobjEmployees[pnumEmployeePrimaryKey].blnActive = false;
   globalTotalCosts -= pobjEmployees[pnumEmployeePrimaryKey].numSalary;
+
+  return true;
 };
 
-//use global globalTotalCosts to get the montly costs
 const getMonthlyCosts = () => {
+  //use global globalTotalCosts to get the montly costs
   return Math.round((globalTotalCosts / 12) * 100) / 100;
 };
 
-// check if company is over budget
 const isOverBudget = () => {
-  return globalTotalCosts > 240000; // 20,000 = total / 12
+  // check if company is over budget. total = 20,000/month * 12 months = 240,000 total
+  return globalTotalCosts > 240000;
 };
+
+//const doesEmployeeIDAlreadyExist = (pEmployeeId)
